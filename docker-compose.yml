@@ -1,2 +1,9 @@
 ---
 version: '3'
+services:
+  ci_master:
+    image: nginx
+    container_name: ci_master
+  ci_target:
+    image: nginx
+    container_name: ci_target
