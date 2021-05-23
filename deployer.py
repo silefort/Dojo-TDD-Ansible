@@ -123,6 +123,15 @@ def ssh_target():
     local_exec(cmd)
     return
 
+@main.command()
+def exec_target():
+    """
+    ssh into ci_target
+    """
+    cmd = 'docker exec -it ci_master ssh -v deploy@ci_target -i /app/ansible_forge/tools/docker/id_rsa -p 1234 -o "StrictHostKeyChecking=no" ' + command
+    local_exec(cmd)
+    return
+
 if __name__ == "__main__":
     main()
 
