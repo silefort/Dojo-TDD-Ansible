@@ -1,0 +1,44 @@
+FROM centos:7
+
+ENV container docker
+
+RUN yum -y install sudo procps-ng net-tools iproute iputils wget && yum clean all
+
+RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == \
+systemd-tmpfiles-setup.service ] || rm -f $i; done); \
+rm -f /lib/systemd/system/multi-user.target.wants/*;\
+rm -f /etc/systemd/system/*.wants/*;\
+rm -f /lib/systemd/system/local-fs.target.wants/*; \
+rm -f /lib/systemd/system/sockets.target.wants/*udev*; \
+rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
+rm -f /lib/systemd/system/basic.target.wants/*;\
+rm -f /lib/systemd/system/anaconda.target.wants/*;\
+rm -f /lib/systemd/system/*.wants/*update-utmp*;
+
+RUN yum -y install openssh-server vim && yum clean all
+
+EXPOSE 80
+EXPOSE 8080
+EXPOSE 8081
+EXPOSE 443
+
+# Set ssh access
+RUN adduser deploy
+RUN usermod -aG wheel deploy
+RUN echo 'deploy:password' | chpasswd
+RUN mkdir -p /home/deploy/.ssh
+RUN chmod 700 /home/deploy/.ssh
+RUN chown deploy:deploy /home/deploy/.ssh
+ADD tools/docker/id_rsa.pub /home/deploy/.ssh/authorized_keys
+RUN chmod 600 /home/deploy/.ssh/authorized_keys
+RUN chown deploy:deploy /home/deploy/.ssh/authorized_keys
+
+# ADD tools/docker/id_rsa.pub /root/.ssh/authorized_keys
+# RUN sed -i 's/#PermitRootLogin yes/PermitRootlogin yes/g' /etc/ssh/sshd_config
+# RUN sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/g' /etc/ssh/sshd_config
+RUN sed -i 's/#Port 22/Port 1234/g' /etc/ssh/sshd_config
+
+# https://www.freedesktop.org/wiki/Software/systemd/ContainerInterface/
+STOPSIGNAL SIGRTMIN+3
+
+CMD ["/sbin/init"]

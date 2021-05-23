@@ -2,8 +2,12 @@
 version: '3'
 services:
   ci_master:
-    image: nginx
+    build:
+      context: .
+      dockerfile: tools/docker/Dockerfile.master
     container_name: ci_master
   ci_target:
-    image: nginx
+    build:
+      context: .
+      dockerfile: tools/docker/Dockerfile.target
     container_name: ci_target
