@@ -17,6 +17,8 @@ rm -f /lib/systemd/system/*.wants/*update-utmp*;
 
 RUN yum -y install openssh-server vim && yum clean all
 
+EXPOSE 8080
+EXPOSE 8081
 EXPOSE 80
 EXPOSE 443
 
