@@ -1,0 +1,36 @@
+---
+version: '3'
+services:
+  ci_master:
+    image: nginx
+    build:
+      context: .
+      dockerfile: tools/docker/Dockerfile.master
+    image: silefort/ansible_forge_ci_master
+    ports:
+      - "8080-8090:8080-8090"
+    volumes:
+      - .:/app/ansible_forge
+      - /sys/fs/cgroup
+    container_name: ci_master
+    privileged: true
+    networks:
+      - ci_network
+  ci_target:
+    build:
+      context: .
+      dockerfile: tools/docker/Dockerfile.target
+    image: silefort/ansible_forge_ci_target
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /sys/fs/cgroup
+      - /var/lib/docker
+    privileged: true
+    container_name: ci_target
+    networks:
+      - ci_network
+networks:
+  ci_network:
+    driver: bridge
