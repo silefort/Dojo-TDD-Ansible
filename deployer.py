@@ -19,7 +19,6 @@ def fix_ssh_target(target):
     https://blog.dafert.org/system-is-booting-up-see-pam_nologin/
     fix "System is booting up. See pam_nologin(8) message"
     """
-    cmd = 'chmod 400 tool/docker/id_rsa'
     cmd = 'docker exec ' + target + ' rm -f /etc/nologin'
     local_exec(cmd)
     cmd = 'docker exec ' + target + ' rm -f /var/run/nologin'
@@ -47,6 +46,8 @@ def run(name, build):
     if build == 'True':
         cmd = cmd + ' --build'
     cmd = cmd + ' ' + name
+    local_exec(cmd)
+    cmd = ' docker exec ci_master sh -c  "chmod 400 /app/ansible_forge/tools/docker/id_rsa"'
     local_exec(cmd)
     fix_ssh_target('ci_target')
     return
