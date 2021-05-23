@@ -105,6 +105,15 @@ def fix_ssh():
     return
 
 @main.command()
+def test():
+    """
+    launch pytest tests
+    """
+    cmd = 'pytest tests -v'
+    local_exec(cmd)
+    return
+
+@main.command()
 def ssh_target():
     """
     ssh into ci_target
