@@ -7,8 +7,6 @@ services:
       context: .
       dockerfile: tools/docker/Dockerfile.master
     image: silefort/ansible_forge_ci_master
-    ports:
-      - "8080-8090:8080-8090"
     volumes:
       - .:/app/ansible_forge
       - /sys/fs/cgroup
@@ -23,6 +21,7 @@ services:
     image: silefort/ansible_forge_ci_target
     ports:
       - "80:80"
+      - "8080-8090:8080-8090"
       - "443:443"
     volumes:
       - /sys/fs/cgroup

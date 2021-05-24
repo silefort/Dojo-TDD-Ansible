@@ -23,5 +23,16 @@ def target_exec(instructions):
     @param instructions a list of command to execute
     @return tuple(stdout, stderr)
     """
-    cmd = 'docker exec -t ci_master ssh deploy@ci_target -i /app/ansible_forge/tools/docker/id_rsa -p 1234 -o "StrictHostKeyChecking=no" ' + instructions
+    cmd = 'docker exec -t ci_target ' + instructions
+    print(cmd)
+    return local_exec(cmd)
+
+def master_exec(instructions):
+    """
+    Execute command locally
+    @param instructions a list of command to execute
+    @return tuple(stdout, stderr)
+    """
+    cmd = 'docker exec -t ci_master ' + instructions
+    print(cmd)
     return local_exec(cmd)

@@ -92,7 +92,9 @@ def ansible(playbook, verbose, tags, interactive):
     if verbose == 'True':
         cmd = cmd + ' -v'
     # cmd = cmd + ' -i inventories/docker/inventory.yml playbooks/'+ playbook +'.yml --key-file="tools/docker/id_ecdsa""'
-    cmd = cmd + ' -i inventories/docker/inventory.yml playbooks/main.yml --key-file="tools/docker/id_ecdsa""'
+    cmd = cmd + ' --become -i inventories/docker/inventory.yml playbooks/main.yml --key-file="tools/docker/id_ecdsa""'
+    local_exec(cmd)
+    cmd = 'pytest tests -v'
     local_exec(cmd)
     return
 

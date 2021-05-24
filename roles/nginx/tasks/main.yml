@@ -1,0 +1,40 @@
+---
+- name: install epel-release
+  yum:
+    name: epel-release
+    state: present
+
+- name: install nginx
+  yum:
+    name: nginx
+    state: present
+
+- name: add default host configuration
+  copy:
+    src: default
+    dest: /etc/nginx/conf.d/default.conf
+
+- name: add status host configuration
+  copy:
+    src: status
+    dest: /etc/nginx/conf.d/status.conf
+
+- name: add status host configuration
+  copy:
+    src: status_page
+    dest: /usr/share/nginx/html/status
+
+- name: add htpasswd host configuration
+  copy:
+    src: htpasswd
+    dest: /etc/nginx/htpasswd
+
+- name: start nginx
+  service:
+    name: nginx
+    state: started
+
+- name: reload nginx
+  service:
+    name: nginx
+    state: reloaded
